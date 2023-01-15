@@ -11,6 +11,7 @@ for _ in range(bus):
 for i in range(1,city+1):
     city_map[i][i] = 0
     
+#경유 노드 수를 증가시키면서 파악하는 것
 for via in range(1,city+1):
     for start in range(1,city+1):
         for end in range(1,city+1):
