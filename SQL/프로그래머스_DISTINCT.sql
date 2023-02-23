@@ -1,0 +1,3 @@
+-- null값은 열이름으로 하면 없어짐
+SELECT COUNT(DISTINCT(NAME))
+FROM ANIMAL_INS;
