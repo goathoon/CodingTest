@@ -1,3 +1,4 @@
+# stack top에 있는 연산자가 현재 연산자보다 우선순위가 높거나 같을 경우, stack.pop() 후 push(stack top >= 현재 연산자)
 sik = list(input())
 op_list = []
 ans = ''
