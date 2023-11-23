@@ -1,42 +1,27 @@
-def solution(survey, choices):
-    global s_dict
-    s_dict = {}
-    s_dict[1] = {'R' : 0, 'T' : 0}
-    s_dict[2] = {'C' : 0, 'F' : 0}
-    s_dict[3] = {'J' : 0, 'M' : 0}
-    s_dict[4] = {'A' : 0, 'N' : 0}
-    
-    global s_mapping
-    s_mapping = {}
-    s_mapping['R'] = 1
-    s_mapping['T'] = 1
-    s_mapping['C'] = 2
-    s_mapping['F'] = 2
-    s_mapping['J'] = 3
-    s_mapping['M'] = 3
-    s_mapping['A'] = 4
-    s_mapping['N'] = 4
-    for idx, s in enumerate(survey):
-        add_score(idx,s,choices)
-    
-    answer = ''
-    for i in range(1,5):
-        answer += get_personality(s_dict[i]) 
-    return answer
+from collections import deque
 
-def add_score(idx,ele,choices):
-    num = choices[idx] 
-    if num < 4 :
-        s_dict[s_mapping[ele[0]]][ele[0]] += 4 - num
-    elif num > 4:
-        s_dict[s_mapping[ele[1]]][ele[1]] += num - 4
-        
-def get_personality(s_num):
-    s_list = list(s_num.keys())
-    if s_num[s_list[0]] >= s_num[s_list[1]]:
-        return s_list[0]
-    else:
-        return s_list[1]
-    
-    
-    
+def solution(board):
+    result = 10000
+    N = len(board)
+    direction = [[0, 1, 0], [1, 0, 1], [0, -1, 2], [-1, 0, 3]]
+    dp = [[[10000] * N for i in range(N)] for j in range(4)]
+    queue = deque()
+    queue.append([0, 0, 0, 0])
+    queue.append([0, 0, 0, 1])
+    while queue:
+        x, y, m, d = queue.popleft()
+        for i in range(4):
+            new_x = x + direction[i][0]
+            new_y = y + direction[i][1]
+            if -1 < new_x < N and -1 < new_y < N and board[new_x][new_y] == 0:
+                new_m = m + 1
+                if not d == direction[i][2]:
+                    new_m += 5
+                if new_m < dp[direction[i][2]][new_x][new_y]:
+                    dp[direction[i][2]][new_x][new_y] = new_m
+                    if new_x == N-1 and new_y == N-1:
+                        continue
+                    queue.append([new_x, new_y, new_m, direction[i][2]])
+    for i in range(4):
+        result = min([result, dp[i][N-1][N-1]])
+    return result * 100
