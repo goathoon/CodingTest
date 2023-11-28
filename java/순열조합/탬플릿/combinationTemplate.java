@@ -1,9 +1,8 @@
-package 순열조합;
+package 순열조합.탬플릿;
 
 // Back Tracking 으로 구현한 조합입니다
 public class combinationTemplate {
     public static void main(String[] args) {
-        System.out.println("hello");
         int[] arr = {1,2,3,4,5};
         boolean[] visited = new boolean[arr.length];
         // arr의 배열에서 2개의 원소를 뽑는 경우의 수

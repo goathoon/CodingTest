@@ -1,5 +1,8 @@
-import java.util.stream.*;
-class Solution {
+package 약수;
+
+import java.util.stream.IntStream;
+
+class pg_기사단원의무기 {
     public int solution(int number, int limit, int power) {
         int answer = 0;
         int[] numbers = IntStream.rangeClosed(1,number).toArray();
