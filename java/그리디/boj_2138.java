@@ -28,6 +28,7 @@ public class boj_2138 {
     }
     private static void toggle(char[] array, int idx){
         array[idx] = array[idx] == '0'? '1' : '0';
+        System.out.println();
     }
 
     private static int getCountOfSwitching(char[] array, char[] to){
