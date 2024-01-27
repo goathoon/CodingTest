@@ -1,5 +1,32 @@
 package DP;
 
+/**
+ * Given two strings text1 and text2, return the length of their longest common subsequence. If there is no common subsequence, return 0.
+ *
+ * A subsequence of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
+ *
+ * For example, "ace" is a subsequence of "abcde".
+ * A common subsequence of two strings is a subsequence that is common to both strings.
+ *
+ *
+ *
+ * Example 1:
+ *
+ * Input: text1 = "abcde", text2 = "ace"
+ * Output: 3
+ * Explanation: The longest common subsequence is "ace" and its length is 3.
+ * Example 2:
+ *
+ * Input: text1 = "abc", text2 = "abc"
+ * Output: 3
+ * Explanation: The longest common subsequence is "abc" and its length is 3.
+ * Example 3:
+ *
+ * Input: text1 = "abc", text2 = "def"
+ * Output: 0
+ * Explanation: There is no such common subsequence, so the result is 0.
+ */
+
 public class leet_1143 {
     class Solution {
         public int longestCommonSubsequence(String text1, String text2) {
@@ -40,6 +67,29 @@ public class leet_1143 {
                 }
             }
             return dp[t1.length-1][t2.length-1];
+        }
+    }
+
+    //trick 사용 + 더 간단하게 풀기
+    class Solution2 {
+        public int longestCommonSubsequence(String text1, String text2) {
+            int len1 = text1.length();
+            int len2 = text2.length();
+
+            // +1 을 추가해서 이따 사용할 dp배열에서 out of bounds 가 나지 않게함.
+            int[][] dp = new int[len1+1][len2+1];
+
+            for(int i1 = 1; i1 <= len1; i1++){
+                for(int i2 = 1; i2 <= len2; i2++){
+                    if(text1.charAt(i1-1) == text2.charAt(i2-1)){
+                        dp[i1][i2] = dp[i1-1][i2-1] + 1;
+                    }
+                    else{
+                        dp[i1][i2] = Math.max(dp[i1-1][i2],dp[i1][i2-1]);
+                    }
+                }
+            }
+            return dp[len1][len2];
         }
     }
 
