@@ -34,7 +34,7 @@ public class leet_1457 {
             if(Objects.isNull(curNode.left) && Objects.isNull(curNode.right)) {
                 int oddCnt = 0;
                 for(int x : map.keySet()){
-                    if (map.get(x) % 각2 == 1){
+                    if (map.get(x) % 2 == 1){
                         oddCnt ++;
                     }
                 }
