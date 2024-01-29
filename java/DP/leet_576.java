@@ -71,4 +71,47 @@ public class leet_576 {
             return dp[maxMove][startRow][startColumn] % MOD;
         }
     }
+    //BOTTOM- UP 방식
+    //이전 BOTTOM_UP보다 내가 직접 이해하기 쉬운 방법의 점화식이었다.
+    class Solution3 {
+        static int [][][] dp;
+        final int MOD = 1000000007;
+        public int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
+            // (m,n)에 move만큼 이동한 후에 도달하는 경우의 수를 dp배열로 선언하였다.
+            // move만큼 이동했을 때, 도달하는 경우의 수를 각 (row,col)마다 구한다.
+            // 그 후에, out of bound된 위치의 dp배열을 move=0 부터 move=maxMove 경로의 수를 다 더한다.
+            dp = new int[maxMove+1][m+2][n+2];
+            int answer = 0;
+            int trickRow = startRow + 1;
+            int trickCol = startColumn + 1;
+            dp[0][trickRow][trickCol] = 1;
+            int[] drow = {1,0,-1,0};
+            int[] dcol = {0,1,0,-1};
+            for(int move = 1; move <= maxMove; move++){
+                for(int r = 0; r <= m+1; r++){
+                    for(int c = 0; c <= n+1; c++){
+                        for(int i = 0; i < 4; i++){
+                            int beforeRow = drow[i] + r;
+                            int beforeCol = dcol[i] + c;
+                            if(beforeRow >= m+1 || beforeRow <= 0 || beforeCol >= n+1 || beforeCol <= 0){
+                                continue;
+                            }
+                            dp[move][r][c] = dp[move][r][c] % MOD + dp[move-1][beforeRow][beforeCol] % MOD;
+                        }
+                    }
+                }
+            }
+            for(int move = 0; move <= maxMove; move++){
+                for(int r = 0; r <= m+1; r++){
+                    answer = answer % MOD + dp[move][r][0] % MOD;
+                    answer = answer % MOD + dp[move][r][n+1] % MOD;
+                }
+                for(int c = 0; c <= n+1; c++){
+                    answer = answer % MOD + dp[move][0][c] % MOD;
+                    answer = answer % MOD + dp[move][m+1][c] % MOD;
+                }
+            }
+            return answer % MOD;
+        }
+    }
 }
