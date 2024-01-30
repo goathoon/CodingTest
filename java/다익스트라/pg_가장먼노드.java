@@ -5,7 +5,7 @@ public class pg_가장먼노드 {
     class Solution {
         static boolean[] visited;
         public int solution(int n, int[][] edge) {
-            List[] list = new ArrayList[n+1];
+            List<Integer>[] list = new ArrayList[n+1];
             visited = new boolean[n+1];
 
             PriorityQueue<Node> pq = new PriorityQueue<>();
@@ -31,10 +31,10 @@ public class pg_가장먼노드 {
                     answer = 0;
                 }
                 answer ++;
-                for(Object nextV: list[curV]){
-                    if(!visited[(int)nextV]){
-                        pq.add(new Node((int)nextV,curD+1));
-                        visited[(int)nextV] = true;
+                for(int nextV: list[curV]){
+                    if(!visited[nextV]){
+                        pq.add(new Node(nextV,curD+1));
+                        visited[nextV] = true;
                     }
                 }
             }
