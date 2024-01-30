@@ -41,6 +41,46 @@ public class pg_가장먼노드 {
             return answer;
         }
     }
+
+    class Solution2 {
+        static boolean[] visited;
+        public int solution(int n, int[][] edge) {
+            List<List<Integer>> list = new ArrayList<>();
+            visited = new boolean[n+1];
+
+            PriorityQueue<Node> pq = new PriorityQueue<>();
+            for(int i = 0; i <= n; i++){
+                list.add(new ArrayList<>());
+            }
+            for(int[] e: edge){
+                int v1 = e[0];
+                int v2 = e[1];
+                list.get(v1).add(v2);
+                list.get(v2).add(v1);
+            }
+            pq.add(new Node(1,0));
+            visited[1] = true;
+            int maxDist = 0;
+            int answer = 0;
+            while(!pq.isEmpty()){
+                Node node = pq.poll();
+                int curV = node.v;
+                int curD = node.dist;
+                if(maxDist < curD){
+                    maxDist = curD;
+                    answer = 0;
+                }
+                answer ++;
+                for(Integer nextV: list.get(curV)){
+                    if(!visited[nextV]){
+                        pq.add(new Node(nextV,curD+1));
+                        visited[nextV] = true;
+                    }
+                }
+            }
+            return answer;
+        }
+    }
     class Node implements Comparable<Node>{
         int v;
         int dist;
