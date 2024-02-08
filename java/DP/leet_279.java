@@ -24,8 +24,8 @@ package DP;
  * 1 <= n <= 104
  */
 public class leet_279 {
-    // Top-Down 방식 TLE줄이기 위한 노력
-    class Solution {
+    // Top-Down 방식 TLE줄이기 위한 노방
+    class Solution1 {
         static int[] dp;
         public int numSquares(int n) {
             dp = new int[n+1];
@@ -40,6 +40,26 @@ public class leet_279 {
 
             for(int i = 1; i * i <= n; i++){
                 dp[n] = Math.min(dp[n], dfs(n-i*i)+1);
+            }
+            return dp[n];
+        }
+    }
+    // Bottom-Up
+    class Solution2 {
+        static int[] dp;
+        public int numSquares(int n) {
+            dp = new int[n+1];
+            for(int i = 0; i < dp.length; i++){
+                dp[i] = Integer.MAX_VALUE;
+            }
+            for(int i = 0; i < Math.sqrt(n); i++){
+                dp[i*i] = 1;
+            }
+            dp[0] = 0;
+            for(int i = 1; i <= n; i++){
+                for(int j = 1; j*j <= i; j++){
+                    dp[i] = Math.min(dp[i], dp[i-j*j] + 1);
+                }
             }
             return dp[n];
         }
