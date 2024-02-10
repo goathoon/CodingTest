@@ -133,5 +133,36 @@ public class leet_368 {
             }
         }
     }
-
+    //Bottom-up으로 풀이한 DP
+    class REAL_DP {
+        public List<Integer> largestDivisibleSubset(int[] nums) {
+            Arrays.sort(nums);
+            // dp의 i번째 리스트는 0~i까지의 Largest Divisible Subset
+            List<List<Integer>> dp = new ArrayList<>(nums.length);
+            for(int i = 0; i < nums.length; i++){
+                List<Integer> innerList = new ArrayList<>();
+                innerList.add(nums[i]);
+                dp.add(innerList);
+            }
+            List<Integer> ansList = new ArrayList<>();
+            ansList.add(nums[0]);
+            for(int i = 0; i < nums.length; i++){
+                for(int j = i+1; j < nums.length; j++){
+                    if(nums[j] % nums[i] == 0){
+                        if(dp.get(j).size() < dp.get(i).size() + 1){
+                            List<Integer> beforeList = dp.get(i);
+                            List<Integer> updateList = new ArrayList<>();
+                            updateList.addAll(beforeList);
+                            updateList.add(nums[j]);
+                            dp.set(j,updateList);
+                            if(ansList.size() < updateList.size()){
+                                ansList = updateList;
+                            }
+                        }
+                    }
+                }
+            }
+            return ansList;
+        }
+    }
 }
