@@ -32,7 +32,7 @@ public class leet_2092 {
                     //     meet.get(p1).add(p2);
                     // }
                     // else{
-                    //     List<Integer> list = new LinkedList<>();
+                    //     List<Integer> list = new LinkedList<>();용
                     //     list.add(p2);
                     //     meet.put(p1,list);
                     // }
