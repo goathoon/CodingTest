@@ -77,4 +77,67 @@ public class boj_2580 {
 
         return false;
     }
+    class Solution2{
+        static int[][] grid = new int[9][9];
+
+        public static void main(String[] args) throws IOException {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            for(int r = 0; r < 9; r++){
+                StringTokenizer st = new StringTokenizer(br.readLine());
+                for(int c = 0; c < 9; c++){
+                    int value = Integer.parseInt(st.nextToken());
+                    grid[r][c] = value;
+                }
+            }
+            dfs(0,0);
+            for(int r = 0; r < 9; r++){
+                for(int c = 0; c < 9; c++){
+                    System.out.printf("%d ", grid[r][c]);
+                }
+                System.out.println();
+            }
+
+        }
+        public static boolean dfs(int row, int col) {
+            if(col == 9){
+                return dfs(row+1,0);
+            }
+            if(row == 9){
+                return true;
+            }
+            if(grid[row][col] == 0){
+                for(int i = 1; i <= 9; i++){
+                    if(check(row,col,i)){
+                        grid[row][col] = i;
+                        if(dfs(row,col+1)){
+                            return true;
+                        }
+                        grid[row][col] = 0;
+                    }
+                }
+                return false;
+            }
+            return dfs(row,col+1);
+        }
+        public static boolean check(int row, int col, int i){
+            for(int r = 0; r < 9; r++){
+                if(grid[r][col] == i){
+                    return false;
+                }
+            }
+            for(int c = 0; c < 9; c++){
+                if(grid[row][c] == i){
+                    return false;
+                }
+            }
+            for(int r = 3*(row/3); r < 3*(row/3+1); r++){
+                for(int c = 3*(col/3); c < 3*(col/3+1); c++){
+                    if(grid[r][c] == i){
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+    }
 }
