@@ -6,6 +6,55 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class boj_1707 {
+    class Solution{
+        static int[] visited;
+        static List<List<Integer>> graph;
+        public static void main(String[] args) throws IOException {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            int K = Integer.parseInt(br.readLine());
+            for(int i = 0; i < K; i++) {
+                StringTokenizer st = new StringTokenizer(br.readLine());
+                int V = Integer.parseInt(st.nextToken());
+                int E = Integer.parseInt(st.nextToken());
+                graph = new ArrayList<>();
+                visited = new int[V + 1];
+                for (int v = 0; v <= V; v++) {
+                    graph.add(new ArrayList<>());
+                }
+                for (int e = 0; e < E; e++) {
+                    StringTokenizer st1 = new StringTokenizer(br.readLine());
+                    int v1 = Integer.parseInt(st1.nextToken());
+                    int v2 = Integer.parseInt(st1.nextToken());
+                    graph.get(v1).add(v2);
+                    graph.get(v2).add(v1);
+                }
+                boolean isBip = true;
+                // 어쩃거나 순회를 해서 visit되어있는 노드랑 현재 노드랑 같아지면 안된다.
+                for (int v = 1; v <= V; v++) {
+                    if(visited[v] ==0){
+                        isBip = dfs(v,1);
+                        if(!isBip) break;
+                    }
+                }
+                if(isBip) System.out.println("YES");
+                else System.out.println("NO");
+            }
+
+        }
+        public static boolean dfs(int curV,int color){
+            boolean isBip = true;
+            visited[curV] = color;
+            for(int next : graph.get(curV)){
+                if(visited[next] == visited[curV]){
+                    return false;
+                }
+                if(visited[next] == 0){
+                    isBip = isBip && dfs(next,color*-1);
+                }
+            }
+            return isBip;
+        }
+    }
     class Main {
         static int[] visited;
         static List<List<Integer>> graph;
