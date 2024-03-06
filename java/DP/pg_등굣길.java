@@ -22,4 +22,31 @@ public class pg_등굣길 {
             return grid[n][m] % mod;
         }
     }
+    class Solution2 {
+        static int[][] grid;
+        static int mod = 1_000_000_007;
+        public int solution(int m, int n, int[][] puddles) {
+            grid = new int[n+1][m+1];
+            for(int[] p : puddles){
+                if(p.length >= 2){
+                    grid[p[1]][p[0]] = -1;
+                }
+            }
+            grid[n][m] = 1;
+            return dfs(1,1);
+        }
+        public int dfs(int row, int col){
+            if(grid[row][col] != 0){
+                return grid[row][col];
+            }
+            if(row+1 < grid.length && grid[row+1][col] != -1) {
+                grid[row][col] += dfs(row+1,col) % mod;
+            }
+            if(col+1 < grid[0].length && grid[row][col+1] != -1){
+                grid[row][col] += dfs(row,col+1) % mod;
+            }
+            grid[row][col] %= mod;
+            return grid[row][col];
+        }
+    }
 }
