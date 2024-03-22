@@ -60,4 +60,53 @@ public class boj_6497 {
         if(parent[x] == x) return x;
         return parent[x] = find(parent[x]);
     }
+    class Solution2 {
+        public static void main(String[] args) throws IOException {
+            class Pos{
+                int end;
+                int dist;
+                Pos(int end, int dist){
+                    this.end = end;
+                    this.dist = dist;
+                }
+            }
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            while(true) {
+                StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+                int N = Integer.parseInt(st.nextToken());
+                int R = Integer.parseInt(st.nextToken());
+                if (N == 0 && R == 0) break;
+                boolean[] visit = new boolean[N];
+                List<List<Pos>> graph = new ArrayList<>();
+                for(int i = 0; i < N; i++){
+                    graph.add(new ArrayList<>());
+                }
+
+                int sum = 0;
+                for(int r = 0; r < R; r++){
+                    st = new StringTokenizer(br.readLine(), " ");
+                    int s = Integer.parseInt(st.nextToken());
+                    int e = Integer.parseInt(st.nextToken());
+                    int d = Integer.parseInt(st.nextToken());
+                    sum += d;
+                    graph.get(s).add(new Pos(e,d));
+                    graph.get(e).add(new Pos(s,d));
+                }
+                PriorityQueue<Pos> pq = new PriorityQueue<>((p1,p2)->p1.dist-p2.dist);
+                pq.add(new Pos(0,0));
+                int use = 0;
+                while(!pq.isEmpty()){
+                    Pos curPoll = pq.poll();
+                    visit[curPoll.end] = true;
+                    use += curPoll.dist;
+                    for(Pos next: graph.get(curPoll.end)){
+                        if(!visit[next.end]){
+                            pq.add(new Pos(next.end,next.dist));
+                        }
+                    }
+                }
+                System.out.println(sum-use);
+            }
+        }
+    }
 }
