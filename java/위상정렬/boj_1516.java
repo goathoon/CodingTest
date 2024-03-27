@@ -47,7 +47,7 @@ public class boj_1516 {
         }
         while(!q.isEmpty()){
             Building b = q.poll();
-            dp[b.num] = Math.max(dp[b.num],b.cost);
+            dp[b.num] = b.cost;
             for(int nextNum : graph.get(b.num)){
                 indegree[nextNum]--;
                 if(indegree[nextNum] == 0){
@@ -57,6 +57,64 @@ public class boj_1516 {
         }
         for(int i = 1; i <= N; i++){
             System.out.println(dp[i]);
+        }
+    }
+    class Solution2 {
+        public static void main(String[] args) throws IOException {
+            class Building{
+                int num;
+                int cost;
+                Building(int num, int cost){
+                    this.num = num;
+                    this.cost = cost;
+                }
+            }
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            int N = Integer.parseInt(br.readLine());
+            int[] indegree = new int[N+1];
+            int[] dp = new int[N+1];
+            int[] build = new int[N+1];
+            Queue<Building> q = new LinkedList<>();
+            List<List<Integer>> graph = new ArrayList<>();
+            for(int i = 0; i <=N; i++){
+                graph.add(new ArrayList<>());
+            }
+
+            for(int n = 1; n <= N; n++){
+                StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+                int i = 0;
+                while(true){
+                    i++;
+                    int token = Integer.parseInt(st.nextToken());
+                    if(i==1){
+                        build[n] = token;
+                    }
+                    if(token == -1){
+                        break;
+                    }
+                    if(i >= 2){
+                        indegree[n]++;
+                        graph.get(token).add(n);
+                    }
+                }
+                if(indegree[n] == 0){
+                    q.add(new Building(n,build[n]));
+                }
+            }
+            while(!q.isEmpty()){
+                Building b = q.poll();
+                dp[b.num] = Math.max(dp[b.num],b.cost);
+                for(int nextNum : graph.get(b.num)){
+                    indegree[nextNum]--;
+                    dp[nextNum] = Math.max(dp[b.num] + build[nextNum], dp[nextNum]);
+                    if(indegree[nextNum] == 0){
+                        q.add(new Building(nextNum, dp[nextNum]));
+                    }
+                }
+            }
+            for(int i = 1; i <= N; i++){
+                System.out.println(dp[i]);
+            }
         }
     }
 }
