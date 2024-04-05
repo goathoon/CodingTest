@@ -12,7 +12,6 @@ public class boj_9370 {
         }
     }
     static List<List<Road>> graph;
-    static boolean[] visit;
     public static void main(String[] args)throws IOException {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -22,23 +21,16 @@ public class boj_9370 {
             int node = Integer.parseInt(st.nextToken());
             int road = Integer.parseInt(st.nextToken());
             int goal = Integer.parseInt(st.nextToken());
-            visit = new boolean[node+1];
 
             st = new StringTokenizer(br.readLine(), " ");
             int start = Integer.parseInt(st.nextToken());
             int g1 = Integer.parseInt(st.nextToken());
             int g2 = Integer.parseInt(st.nextToken());
 
-            // 반드시 거치는 곳
-            Set<Integer> needs = new HashSet<>();
-            needs.add(g1);
-            needs.add(g2);
-
             graph = new ArrayList<>();
             for(int n = 0; n <= node; n++){
                 graph.add(new ArrayList<>());
             }
-
 
             for(int r = 0; r < road; r++){
                 st = new StringTokenizer(br.readLine(), " ");
@@ -48,17 +40,24 @@ public class boj_9370 {
                 graph.get(n1).add(new Road(n2,dist));
                 graph.get(n2).add(new Road(n1,dist));
             }
-
             Set<Integer> goals = new HashSet<>();
             for(int g = 0; g < goal; g++){
                 goals.add(Integer.parseInt(br.readLine()));
             }
+            List<Integer> ans = new ArrayList<>();
 
-            // 반드시 거쳐야하는 경로의 끝지점을 다익스트라로 찾고 newStart로 지정
-            // 이 때, 거쳐가는 모든 Node들을 visit처리함. 해당 경로들은 무조건 최종 목적지 까지 가는데에 지장이 없기 때문임.
-            int newStart = dijkstraToNeed(start,needs);
+            for(int g: goals){
+                int res1 = dijkstra(start, g1) + dijkstra(g1, g2) + dijkstra(g2, g);
+                int res2 = dijkstra(start, g2) + dijkstra(g2, g1) + dijkstra(g1, g);
+                int res3 = dijkstra(start,g);
 
-            List<Integer> ans = dijkstra(newStart,goals);
+                int minRes = Math.min(res1,res2);
+                if(minRes == res3){
+                    ans.add(g);
+                }
+            }
+
+
             Collections.sort(ans);
             StringBuilder sb = new StringBuilder();
             for(int a : ans){
@@ -68,88 +67,40 @@ public class boj_9370 {
             graph.clear();
         }
     }
-
-    public static int dijkstraToNeed(int start, Set<Integer> needs){
+    public static int dijkstra(int start, int end){
         class Pos{
-            int end;
-            int cost;
-            Pos(int end, int cost){
-                this.end = end;
-                this.cost = cost;
-            }
-        }
-        int[] dist = new int[graph.size() + 1];
-        for(int i = 0; i <dist.length; i++){
-            dist[i] = Integer.MAX_VALUE;
-        }
-        dist[start] = 0;
-
-        PriorityQueue<Pos> pq = new PriorityQueue<>((p1,p2)->p1.cost-p2.cost);
-        pq.add(new Pos(start, 0));
-
-        boolean isEnd = false;
-        while(!pq.isEmpty()){
-            Pos curP = pq.poll();
-            int curNum = curP.end;
-            int curCost = curP.cost;
-            if(dist[curNum] < curCost) continue;
-
-
-            if(isEnd && needs.contains(curNum)){
-                return curNum;
-            }
-            visit[curNum] = true;
-            if(needs.contains(curNum)) isEnd = true;
-
-            for(Road r : graph.get(curNum)){
-                if(r.cost+curCost < dist[r.end]){
-                    dist[r.end] = r.cost+curCost;
-                    pq.add(new Pos(r.end, r.cost + curCost));
-                }
-            }
-        }
-        return -1;
-    }
-
-    public static List<Integer> dijkstra(int start, Set<Integer> goals){
-        class Pos {
             int num;
-            int cost;
-            Pos(int num, int cost){
+            int dist;
+            Pos(int num, int dist){
                 this.num = num;
-                this.cost = cost;
+                this.dist = dist;
             }
         }
-        List<Integer> answers = new ArrayList<>();
-
         int[] dist = new int[graph.size()+1];
         for(int i = 0; i < dist.length; i++){
             dist[i] = Integer.MAX_VALUE;
         }
-
-        PriorityQueue<Pos> pq = new PriorityQueue<>((p1,p2)->p1.cost-p2.cost);
-        pq.add(new Pos(start,0));
+        PriorityQueue<Pos> pq = new PriorityQueue<>((p1,p2)->p1.dist-p2.dist);
         dist[start] = 0;
-
+        pq.add(new Pos(start, 0));
         while(!pq.isEmpty()){
             Pos curP = pq.poll();
             int curNum = curP.num;
-            int curCost = curP.cost;
-            if(dist[curNum] < curCost) continue;
-//            if(goals.contains(curNum)) break;
+            int curDist = curP.dist;
+            if(curNum == end){
+                return dist[curNum];
+            }
+            if(curDist > dist[curNum]) continue;
 
             for(Road r : graph.get(curNum)){
-                if(visit[r.end] || curCost + r.cost >= dist[r.end]) continue;
-                pq.add(new Pos(r.end, curCost + r.cost));
-                dist[r.end] = curCost + r.cost;
+                int next = r.end;
+                int nextDist = curP.dist + r.cost;
+                if(dist[next] > nextDist){
+                    dist[next] = nextDist;
+                    pq.add(new Pos(next,nextDist));
+                }
             }
         }
-        for(int g : goals){
-            if(dist[g] != Integer.MAX_VALUE && !visit[g]){
-                answers.add(g);
-            }
-        }
-        return answers;
-
+        return -1;
     }
 }
