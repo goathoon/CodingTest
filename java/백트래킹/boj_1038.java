@@ -24,7 +24,6 @@ public class boj_1038 {
         if(rank == N) return number;
 
         // 첫째자리수 채우기
-        long returnVal = 100;
         if(number == -1){
             for(int first = length-1; first <= 9; first++){
                 if(curLength+1 > length) continue;
