@@ -17,7 +17,7 @@ public class boj_6209 {
         }
         stones[n] = end;
         Arrays.sort(stones);
-
+        int ans = 0;
         int left = 0, right = end;
         while(left <= right){
             int mid = (left+right)/2;
@@ -25,10 +25,11 @@ public class boj_6209 {
             if(steps < n-m+1){
                 right = mid-1;
             }else{
+                ans = mid;
                 left = mid+1;
             }
         }
-        System.out.println(left-1);
+        System.out.println(ans);
     }
     public static int countNumbers(int mid, int[] stones){
         int curPos = 0;
