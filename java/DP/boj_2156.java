@@ -14,7 +14,7 @@ public class boj_2156 {
             arr[n] = Integer.parseInt(br.readLine());
         }
         dp[1] = arr[1];
-        dp[2] = arr[1]+arr[2];
+        if(N>=2) dp[2] = arr[1]+arr[2];
         for(int n = 3; n <= N; n++){
             dp[n] = Math.max(dp[n-2] + arr[n],dp[n]);
             dp[n] = Math.max(dp[n-3] + arr[n-1]+arr[n], dp[n]);
