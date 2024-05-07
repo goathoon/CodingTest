@@ -30,12 +30,16 @@ public class leet_1043 {
         public int maxSumAfterPartitioning(int[] arr, int k) {
             int[] dp = new int[arr.length];
             for(int i = 0; i < arr.length; i++){
-                int curMax = arr[i];
-                for(int n = i; n < Math.min(i+k,arr.length); n++){
-                    if(curMax < arr[n]){
-                        curMax = arr[n];
+                int curMax = 0;
+                for(int j = i; j < Math.min(i+k,arr.length); j++){
+                    curMax = Math.max(curMax,arr[j]);
+                    if(i == 0){
+                        dp[j] = Math.max(dp[j], curMax*(j-i+1));
                     }
-                    dp[n] = i-1 >= 0 ? Math.max(dp[n],(n-i+1) * curMax + dp[i-1]) : Math.max(dp[n],(n-i+1) * curMax);
+                    else{
+                        dp[j] = Math.max(dp[j], dp[i-1]+curMax*(j-i+1));
+                    }
+
                 }
             }
             return dp[arr.length-1];
