@@ -43,26 +43,23 @@ public class leet_1043 {
     }
     //Top-down
     class Solution2 {
-        static Map<Integer,Integer> map;
+        static int[] dp;
         public int maxSumAfterPartitioning(int[] arr, int k) {
-            map = new HashMap<>();
+            dp = new int[arr.length];
             return dfs(0,arr,k);
         }
-        public int dfs(int i, int[] arr, int k){
-            if(i == arr.length){
-                return 0;
-            }
-            if(map.containsKey(i)){
-                return map.get(i);
+        public static int dfs(int i, int[] arr, int k){
+            if(i >= arr.length) return 0;
+            if(dp[i] != 0){
+                return dp[i];
             }
             int curMax = 0;
-            int curVal = 0;
             for(int j = i; j < Math.min(i+k,arr.length); j++){
-                curMax = Math.max(curMax,arr[j]);
-                curVal = Math.max(curVal,(j-i+1) * curMax + dfs(j+1,arr,k));
+                curMax = Math.max(curMax, arr[j]);
+                dp[i] = Math.max(curMax*(j-i+1)+dfs(j+1, arr, k), dp[i]);
             }
-            map.put(i,curVal);
-            return curVal;
+
+            return dp[i];
         }
     }
 }
