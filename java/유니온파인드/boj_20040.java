@@ -35,9 +35,12 @@ public class boj_20040 {
         }
         return parent[x] = getParent(parent[x]);
     }
-    public static void union(int a, int b){
+    public static void union(int a, int b) {
         int pA = getParent(a);
         int pB = getParent(b);
+        // if(pA<pB){
+        //     parent[b]=pA; 가 아니다.
+        //}
         if(pA < pB){
             parent[pB] = pA;
         }
