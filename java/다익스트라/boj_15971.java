@@ -16,6 +16,66 @@ class Node{
     }
 }
 public class boj_15971 {
+    class BFS{
+        public static void main(String[] args) throws IOException {
+            class BFSNode{
+                int num;
+                int dist;
+                int max;
+                BFSNode(int num, int dist){
+                    this.num = num;
+                    this.dist = dist;
+                }
+                BFSNode(int num, int dist, int max){
+                    this.num = num;
+                    this.dist = dist;
+                    this.max = max;
+                }
+            }
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            StringTokenizer st;
+
+            st = new StringTokenizer(br.readLine(), " ");
+            int N = Integer.parseInt(st.nextToken());
+            int start = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
+            boolean[] visit = new boolean[N+1];
+            List<List<BFSNode>> graph = new ArrayList<>();
+            for (int i = 0; i <= N; i++) {
+                graph.add(new ArrayList<>());
+            }
+            for (int n = 1; n < N; n++) {
+                st = new StringTokenizer(br.readLine(), " ");
+                int n1 = Integer.parseInt(st.nextToken());
+                int n2 = Integer.parseInt(st.nextToken());
+                int dist = Integer.parseInt(st.nextToken());
+                graph.get(n1).add(new BFSNode(n2, dist));
+                graph.get(n2).add(new BFSNode(n1, dist));
+            }
+            // 큐를 사용할 수 있는 이유는 경로가 유일하기 때문이다.
+            Queue<BFSNode> q = new LinkedList<>();
+            q.add(new BFSNode(start,0,0));
+            visit[start] = true;
+            while(!q.isEmpty()){
+                BFSNode curNode = q.poll();
+                int curNum = curNode.num;
+                int curDist = curNode.dist;
+                int curMax = curNode.max;
+                if(curNum == end){
+                    System.out.println(curDist - curMax);
+                    break;
+                }
+                for(BFSNode nextNode: graph.get(curNum)){
+                    int nextNum = nextNode.num;
+                    int nextDist = nextNode.dist + curDist;
+                    int nextMax = Math.max(curMax, nextNode.dist);
+                    if(visit[nextNum]) continue;
+                    visit[nextNum] = true;
+                    q.offer(new BFSNode(nextNum, nextDist, nextMax));
+                }
+            }
+        }
+    }
     class 다익스트라_DFS없이최대값저장{
         public static void main(String[] args) throws IOException {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
