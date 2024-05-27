@@ -2,6 +2,8 @@ package 그리디;
 
 import java.io.*;
 import java.util.*;
+/** 도움 받은 곳 https://aerocode.net/392 **/
+
 public class boj_2437 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
