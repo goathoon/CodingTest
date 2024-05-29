@@ -27,28 +27,25 @@ public class boj_1463 {
             Scanner sc = new Scanner(System.in);
             int N = sc.nextInt();
             arr = new int[N + 1];
-            for (int i = 0; i < arr.length; i++) {
-                arr[i] = Integer.MAX_VALUE;
-            }
-            dfs(N, 0);
-            System.out.println(arr[1]);
+            Arrays.fill(arr,Integer.MAX_VALUE);
+            System.out.println(dfs(N));
         }
 
-        public static void dfs(int N, int val) {
-            if (arr[N] <= val) {
-                return;
+        // N의 수를 1로 만들기 위해 필요한 계산 수 반환
+        public static int dfs(int N) {
+            if(N==1){
+                return 0;
             }
-            arr[N] = val;
-            if (N == 1) {
-                return;
+            if(arr[N] == Integer.MAX_VALUE){
+                if(N % 3 == 0){
+                    arr[N] = Math.min(dfs(N/3)+1, arr[N]);
+                }
+                if(N % 2 == 0){
+                    arr[N] = Math.min(dfs(N/2)+1, arr[N]);
+                }
+                arr[N] = Math.min(dfs(N-1)+1, arr[N]);
             }
-            if (N % 3 == 0) {
-                dfs(N / 3, val + 1);
-            }
-            if (N % 2 == 0) {
-                dfs(N / 2, val + 1);
-            }
-            dfs(N - 1, val + 1);
+            return arr[N];
         }
     }
 }
