@@ -1,4 +1,4 @@
-package DP;
+package 백트래킹;
 
 import java.io.*;
 import java.util.StringTokenizer;
