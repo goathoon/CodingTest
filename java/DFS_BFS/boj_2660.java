@@ -1,3 +1,5 @@
+package DFS_BFS;
+
 import java.io.*;
 import java.util.*;
 public class boj_2660 {
